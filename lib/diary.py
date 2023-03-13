@@ -1,47 +1,35 @@
 # File: lib/diary.py
+import math
+
 
 class Diary:
     def __init__(self):
-        pass
+        self.allentries = []
 
     def add(self, entry):
-        # Parameters:
-        #   entry: an instance of DiaryEntry
-        # Returns:
-        #   Nothing
-        # Side-effects:
-        #   Adds the entry to the entries list
-        pass
+        self.allentries.append(entry)
 
     def all(self):
-        # Returns:
-        #   A list of instances of DiaryEntry
-        pass
+        return self.allentries
 
     def count_words(self):
-        # Returns:
-        #   An integer representing the number of words in all diary entries
-        # HINT:
-        #   This method should make use of the `count_words` method on DiaryEntry.
-        pass
+        word_count = 0
+        for entry in self.all():
+            word_count += entry.count_words()
+        return word_count
+
 
     def reading_time(self, wpm):
-        # Parameters:
-        #   wpm: an integer representing the number of words the user can read
-        #        per minute
-        # Returns:
-        #   An integer representing an estimate of the reading time in minutes
-        #   if the user were to read all entries in the diary.
-        pass
+        return math.ceil(self.count_words() / wpm)    
+    # this method notably returns a rounded integer (always rounding up)
 
     def find_best_entry_for_reading_time(self, wpm, minutes):
-        # Parameters:
-        #   wpm:     an integer representing the number of words the user can
-        #            read per minute
-        #   minutes: an integer representing the number of minutes the user has
-        #            to read
-        # Returns:
-        #   An instance of DiaryEntry representing the entry that is closest to,
-        #   but not over, the length that the user could read in the minutes
-        #   they have available given their reading speed.
-        pass
+        words_can_read = wpm * minutes
+        entries = []
+        for entry in self.all(): 
+            if entry.count_words() <= words_can_read:
+                entries.append(entry.contents)
+        final_list = sorted(entries)
+        print(entries)
+        print(final_list)
+        return final_list[-1]
